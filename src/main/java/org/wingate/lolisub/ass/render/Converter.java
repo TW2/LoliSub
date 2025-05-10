@@ -313,15 +313,15 @@ public class Converter {
                 for(Map.Entry<Tag, String> entry : map.entrySet()){
                     switch(entry.getKey()){
                         case Tag.Scale -> {
-                            double sc = Double.parseDouble(entry.getValue());
+                            double sc = Double.parseDouble(entry.getValue()) / 100d;
                             transform.scale(sc, sc);
                         }
                         case Tag.ScaleX -> {
-                            double sc = Double.parseDouble(entry.getValue());
+                            double sc = Double.parseDouble(entry.getValue()) / 100d;
                             transform.scale(sc, 1d);
                         }
                         case Tag.ScaleY -> {
-                            double sc = Double.parseDouble(entry.getValue());
+                            double sc = Double.parseDouble(entry.getValue()) / 100d;
                             transform.scale(1d, sc);
                         }
                         case Tag.Spacing -> c.setExtraSpacing(Double.parseDouble(entry.getValue()));
