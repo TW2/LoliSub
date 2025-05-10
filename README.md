@@ -1,4 +1,4 @@
-[![Java CI with Maven](https://github.com/TW2/LoliSub/actions/workflows/maven.yml/badge.svg)](https://github.com/TW2/LoliSub/actions/workflows/maven.yml)
+[![Java CI with Maven](https://github.com/TW2/LoliSub/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/TW2/LoliSub/actions/workflows/maven.yml)
 -
 LoliSub
 -
