@@ -1,6 +1,8 @@
 package org.wingate.lolisub.ass.render;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public enum Tag {
     Reset("Reset", "r", 1), // r
@@ -105,6 +107,63 @@ public enum Tag {
             }
         }
         return tags;
+    }
+
+    public static Object valuesOf(Map.Entry<Tag, String> entry){
+        Tag tag = entry.getKey();
+        String value = entry.getValue();
+        switch(tag){
+            // Integer case
+            case AlignmentLegacy, AlignmentNumPad, BaselineOffset, BorderStyle,
+                 FontEncoding, Karaoke, KaraokeFill, KaraokeFillLegacy, KaraokeOutline,
+                 MarginL, MarginR, MarginV, MarginT, MarginB, WrapStyle -> {
+                String s = value.replace(tag.getTag(), "");
+                if(!s.isEmpty()) return Integer.parseInt(s);
+            }
+            // Float case
+            case FontSize -> {
+                String s = value.replace(tag.getTag(), "");
+                if(!s.isEmpty()) return Float.parseFloat(s);
+            }
+            // Double case
+            case Blur, BlurEdge, OutlineThickness, OutlineThicknessX,
+                 OutlineThicknessY, ShadowShift, ShadowShiftX, ShadowShiftY,
+                 Rotation, RotationX, RotationY, RotationZ, Scale, ScaleX, ScaleY,
+                 Spacing, ShearX, ShearY -> {
+                String s = value.replace(tag.getTag(), "");
+                if(!s.isEmpty()) return Double.parseDouble(s);
+            }
+            // Boolean case
+            case Bold, Italic, Underline, StrikeOut -> {
+                String s = value.replace(tag.getTag(), "");
+                if(!s.isEmpty()) return s.equals("1");
+            }
+            // Color case
+            case TextColor, KaraokeColor, OutlineColor, ShadowColor -> {
+                value = value.replace("&", "");
+                value = value.replace("H", "");
+                value = value.replace(tag.getTag(), "");
+                if(value.isEmpty()) return null;
+                int r = Integer.parseInt(value.substring(4), 16);
+                int g = Integer.parseInt(value.substring(2, 4), 16);
+                int b = Integer.parseInt(value.substring(0, 2), 16);
+                return new Color(r, g, b);
+            }
+            // Alpha case
+            case TextAlpha, KaraokeAlpha, OutlineAlpha, ShadowAlpha, Alpha -> {
+                value = value.replace("&", "");
+                value = value.replace("H", "");
+                value = value.replace(tag.getTag(), "");
+                if(value.isEmpty()) return null;
+                return 255 - Integer.parseInt(value, 16);
+            }
+            // 2 parameters case
+            case FadeSimple, Position, Origin -> {
+                value = value.replace(tag.getTag(), "");
+
+            }
+        }
+        return null;
     }
 
     public String getName() {

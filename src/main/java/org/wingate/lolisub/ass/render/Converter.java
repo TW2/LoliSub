@@ -3,7 +3,7 @@ package org.wingate.lolisub.ass.render;
 import org.wingate.lolisub.ass.ASS;
 import org.wingate.lolisub.ass.AssEvent;
 import org.wingate.lolisub.ass.AssStyle;
-import org.wingate.lolisub.ass.AssTime;
+import org.wingate.lolisub.helper.Msg;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
@@ -13,121 +13,21 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Converter {
 
-    private List<AGraphicElement> elements;
-
-    private String character;
-    private double contourX;
-    private double contourY;
-    private double contourWidth;
-    private double contourHeight;
-    private int videoWidth;
-    private int videoHeight;
-    private Shape visibility;
-    private AssStyle assStyle;
-    private boolean bold;
-    private boolean italic;
-    private boolean underline;
-    private boolean strikeOut;
-    private String fontName;
-    private float fontSize;
-    private Color textColor;
-    private Color karaokeColor;
-    private Color outlineColor;
-    private Color shadowColor;
-    private double alpha;
-    private double textAlpha;
-    private double karaokeAlpha;
-    private double outlineAlpha;
-    private double shadowAlpha;
-    private double scaleX;
-    private double scaleY;
-    private double spacing;
-    private double angleX;
-    private double angleY;
-    private double angleZ;
-    private int borderStyle;
-    private double outlineThicknessX;
-    private double outlineThicknessY;
-    private double shadowShiftX;
-    private double shadowShiftY;
-    private double blurEdge;
-    private double blur;
-    private int alignment;
-    private double marginL;
-    private double marginR;
-    private double marginV;
-    private double marginT;
-    private double marginB;
-    private int encoding;
-    private Point2D origin;
-    private double shearX;
-    private double shearY;
-    private AssTime karaoke;
-    private AssTime karaokeFill;
-    private AssTime karaokeOutline;
-    private int wrapStyle;
-    private Point2D position;
-
-    // TODO: Animation \t
-    // TODO: Visibility \clip
-    // TODO: Drawing
-    // TODO: Baseline offset \pbo
+    private final List<AGraphicElement> elements;
 
     private Converter(AssEvent event){
         elements = new ArrayList<>();
+    }
 
-        bold = event.getStyle().getAssFont().isBold(); // STYLE: true is 1, false is 0
-        italic = event.getStyle().getAssFont().isItalic(); // STYLE: true is 1, false is 0
-        underline = event.getStyle().getAssFont().isUnderline(); // STYLE: true is 1, false is 0
-        strikeOut = event.getStyle().getAssFont().isStrikeout(); // STYLE: true is 1, false is 0
-        fontName = event.getStyle().getAssFont().getFont().getFontName();
-        fontSize = event.getStyle().getAssFont().getFont().getSize2D(); // SIZE: must be the size of height in pixels (TODO)
-        textColor = event.getStyle().getTextColor().getColor();
-        karaokeColor = event.getStyle().getKaraokeColor().getColor();
-        outlineColor = event.getStyle().getOutlineColor().getColor();
-        shadowColor = event.getStyle().getShadowColor().getColor();
-        alpha = 1d; // ALPHA: 255 is transparent, 0 is opaque (must be the inverse (1d is opaque))
-        textAlpha = 1d; // ALPHA: 255 is transparent, 0 is opaque (must be the inverse (1d is opaque))
-        karaokeAlpha = 1d; // ALPHA: 255 is transparent, 0 is opaque (must be the inverse (1d is opaque))
-        outlineAlpha = 1d; // ALPHA: 255 is transparent, 0 is opaque (must be the inverse (1d is opaque))
-        shadowAlpha = 1d; // ALPHA: 255 is transparent, 0 is opaque (must be the inverse (1d is opaque))
-        scaleX = 1d; // SCALE: 100 is 1d (100%)
-        scaleY = 1d; // SCALE: 100 is 1d (100%)
-        spacing = 0d;
-        angleX = 0d;
-        angleY = 0d;
-        angleZ = 0d;
-        borderStyle = 1; // TODO: Something to define it, and use it
-        outlineThicknessX = 2d; // Bord: in pixel
-        outlineThicknessY = 2d; // Bord: in pixel
-        shadowShiftX = 2d; // Shad: in pixel
-        shadowShiftY = 2d; // Shad: in pixel
-        blurEdge = 0d;
-        blur = 0d;
-        alignment = 2;
-        marginL = 0d;
-        marginR = 0d;
-        marginV = 0d;
-        marginT = 0d;
-        marginB = 0d;
-        encoding = 1; // TODO: Something to define it, and use it
-        origin = new Point2D.Double(Double.MIN_VALUE, Double.MAX_VALUE); // Set to min (undesirable value)
-        shearX = 0d;
-        shearY = 0d;
-        karaoke = new AssTime(-1L);;
-        karaokeFill = new AssTime(-1L);;
-        karaokeOutline = new AssTime(-1L);;
-        wrapStyle = 2; // TODO: Something to define it, and use it
-        position = new Point2D.Double(Double.MIN_VALUE, Double.MAX_VALUE); // Set to min (undesirable value)
+    public List<AGraphicElement> getElements() {
+        return elements;
     }
 
     public static Converter creteShapes(AssEvent event, ASS ass){
@@ -257,25 +157,49 @@ public class Converter {
     private List<Char> doDiv(AssEvent event){
         final List<Char> chars = new ArrayList<>();
 
-        Pattern p = Pattern.compile("\\{*(?<tags>[^\\}]*)\\}*(?<letter>[^\\{]{1})");
-        Matcher m = p.matcher(event.getText());
-
-        String remember = "";
-
-        while(m.find()){
-            Char c = new Char();
-            if(!m.group("tags").isEmpty() || !remember.isEmpty()){
-                remember += m.group("tags");
-                if(remember.contains("\r")){
-                    int resetIndex = remember.indexOf("\r");
-                    remember = remember.substring(resetIndex);
+        StringBuilder remember = new StringBuilder();
+        String str = event.getText().replace("}{", "");
+        if(str.contains("{")){
+            Pattern p = Pattern.compile("\\{([^\\}]+)\\}([^\\{]*)");
+            Matcher m = p.matcher(str);
+            while(m.find()){
+                String[] letters = new String[0];
+                if(!m.group(2).isEmpty()){
+                    letters = new String[m.group(2).length()];
+                    for(int i=0; i<m.group(2).length(); i++){
+                        letters[i] = Character.toString(m.group(2).toCharArray()[i]);
+                    }
                 }
+                if(!m.group(1).isEmpty() || (!remember.isEmpty())){
+                    remember.append(m.group(1));
+                }
+                if(remember.toString().contains("\\r")){
+                    int resetIndex = remember.indexOf("\\r");
+                    remember = new StringBuilder(remember.substring(resetIndex));
+                }
+                for(Map<Tag, String> tags : Tag.getTagsFrom(remember.toString())){
+                    if(Arrays.stream(letters).toList().isEmpty()){
+                        Char c = new Char();
+                        c.addTag(tags);
+                        chars.add(c);
+                    }else{
+                        for(String s : letters){
+                            Char c = new Char();
+                            c.addTag(tags);
+                            c.setCharacter(s);
+                            chars.add(c);
+                        }
+                    }
 
-                for(Map<Tag, String> tags : Tag.getTagsFrom(remember)){
-                    c.addTag(tags);
                 }
             }
-            if(!m.group("letter").isEmpty()) c.setCharacter(m.group("letter"));
+        }else{
+            char[] ca = str.toCharArray();
+            for(char c : ca){
+                Char cc = new Char();
+                cc.setCharacter(Character.toString(c));
+                chars.add(cc);
+            }
         }
 
         return chars;
@@ -308,23 +232,35 @@ public class Converter {
             TextLayout layout = new TextLayout(
                     c.getCharacter(), c.getFont(), g.getFontRenderContext()
             );
+            c.setAdvance(layout.getAdvance());
             AffineTransform transform = new AffineTransform();
             for(Map<Tag, String> map : c.getTags()){
                 for(Map.Entry<Tag, String> entry : map.entrySet()){
+                    String s = entry.getValue();
                     switch(entry.getKey()){
                         case Tag.Scale -> {
-                            double sc = Double.parseDouble(entry.getValue()) / 100d;
-                            transform.scale(sc, sc);
+                            if(!s.isEmpty()){
+                                double sc = Double.parseDouble(s) / 100d;
+                                transform.scale(sc, sc);
+                            }
                         }
                         case Tag.ScaleX -> {
-                            double sc = Double.parseDouble(entry.getValue()) / 100d;
-                            transform.scale(sc, 1d);
+                            if(!s.isEmpty()){
+                                double sc = Double.parseDouble(s) / 100d;
+                                transform.scale(sc, 1d);
+                            }
                         }
                         case Tag.ScaleY -> {
-                            double sc = Double.parseDouble(entry.getValue()) / 100d;
-                            transform.scale(1d, sc);
+                            if(!s.isEmpty()){
+                                double sc = Double.parseDouble(s) / 100d;
+                                transform.scale(1d, sc);
+                            }
                         }
-                        case Tag.Spacing -> c.setExtraSpacing(Double.parseDouble(entry.getValue()));
+                        case Tag.Spacing -> {
+                            if(!s.isEmpty()){
+                                c.setExtraSpacing(Double.parseDouble(s));
+                            }
+                        }
                     }
                 }
             }
@@ -364,13 +300,16 @@ public class Converter {
         );
 
         float fontSizePoints = notEval.getSize2D();
-        while(!evaluation.contains(layout.getBounds())){
+        double evaluate = evaluation.getBounds2D().getHeight();
+        double forced = layout.getAscent() + layout.getLeading() + layout.getDescent();
+        while(evaluate < forced && fontSizePoints > 0f){
             fontSizePoints--;
             layout = new TextLayout(
                     event.getText(),
                     notEval.deriveFont(fontSizePoints),
                     g.getFontRenderContext()
             );
+            forced = layout.getAscent() + layout.getLeading() + layout.getDescent();
         }
 
         // =========
@@ -379,6 +318,7 @@ public class Converter {
         Map<TextAttribute, Object> attributes = new HashMap<>();
         // Font
         attributes.put(TextAttribute.FONT, event.getStyle().getAssFont().getFont());
+        attributes.put(TextAttribute.FAMILY, notEval.getFamily());
         // Size Points to pixels
         attributes.put(TextAttribute.SIZE, fontSizePoints);
         // Bold / Plain
@@ -425,13 +365,41 @@ public class Converter {
         for(Map<Tag, String> map : c.getTags()){
             for(Map.Entry<Tag, String> entry : map.entrySet()){
                 switch(entry.getKey()){
-                    case Tag.Reset -> strStyle = entry.getValue();
-                    case Tag.Bold -> bold = entry.getValue().equals("1");
-                    case Tag.Italic -> italic = entry.getValue().equals("1");
-                    case Tag.Underline -> underline = entry.getValue().equals("1");
-                    case Tag.StrikeOut -> strikeOut = entry.getValue().equals("1");
-                    case Tag.FontName -> fontName = entry.getValue();
-                    case Tag.FontSize -> fontPoints = Float.parseFloat(entry.getValue());
+                    case Tag.Reset -> {
+                        if(!entry.getValue().isEmpty()){
+                            strStyle = entry.getValue();
+                        }
+                    }
+                    case Tag.Bold -> {
+                        if(Tag.valuesOf(entry) instanceof Boolean value){
+                            bold = value;
+                        }
+                    }
+                    case Tag.Italic -> {
+                        if(Tag.valuesOf(entry) instanceof Boolean value){
+                            italic = value;
+                        }
+                    }
+                    case Tag.Underline -> {
+                        if(Tag.valuesOf(entry) instanceof Boolean value){
+                            underline = value;
+                        }
+                    }
+                    case Tag.StrikeOut -> {
+                        if(Tag.valuesOf(entry) instanceof Boolean value){
+                            strikeOut = value;
+                        }
+                    }
+                    case Tag.FontName -> {
+                        if(!entry.getValue().isEmpty()){
+                            fontName = entry.getValue();
+                        }
+                    }
+                    case Tag.FontSize -> {
+                        if(Tag.valuesOf(entry) instanceof Float value){
+                            fontPoints = value;
+                        }
+                    }
                 }
             }
         }
@@ -440,7 +408,7 @@ public class Converter {
         // Style
         // =========
         AssStyle style = event.getStyle();
-        if(strStyle != null && !strStyle.isEmpty()){
+        if(strStyle != null){
             for(AssStyle s : ass.getStyles()){
                 if(s.getName().equals(strStyle)){
                     style = s;
@@ -452,17 +420,17 @@ public class Converter {
         // =========
         // Size in pixel
         // =========
-        int strFontStyle = Font.PLAIN;
-        if(bold) strFontStyle += Font.BOLD;
-        if(italic) strFontStyle += Font.ITALIC;
-        Font notEval = new Font(fontName, strFontStyle, style.getAssFont().getFont().getSize());
+        int iFontStyle = Font.PLAIN;
+        if(bold) iFontStyle += Font.BOLD;
+        if(italic) iFontStyle += Font.ITALIC;
+        Font notEval = new Font(fontName, iFontStyle, style.getAssFont().getFont().getSize());
         notEval = notEval.deriveFont(fontPoints);
 
         Rectangle2D evaluation = new Rectangle2D.Double(
                 0d,
                 0d,
                 ass.getInfos().getPlayResX() * 2.5,
-                style.getAssFont().getFont().getSize() // pixels
+                fontPoints // pixels
         );
 
         TextLayout layout = new TextLayout(
@@ -472,13 +440,16 @@ public class Converter {
         );
 
         float fontSizePoints = notEval.getSize2D();
-        while(!evaluation.contains(layout.getBounds())){
+        double evaluate = evaluation.getBounds2D().getHeight();
+        double forced = layout.getAscent() + layout.getLeading() + layout.getDescent();
+        while(evaluate < forced && fontSizePoints > 0f){
             fontSizePoints--;
             layout = new TextLayout(
                     event.getText(),
                     notEval.deriveFont(fontSizePoints),
                     g.getFontRenderContext()
             );
+            forced = layout.getAscent() + layout.getLeading() + layout.getDescent();
         }
 
         // =========
@@ -487,6 +458,7 @@ public class Converter {
         Map<TextAttribute, Object> attributes = new HashMap<>();
         // Font
         attributes.put(TextAttribute.FONT, style.getAssFont().getFont());
+        attributes.put(TextAttribute.FAMILY, notEval.getFamily());
         // Size Points to pixels
         attributes.put(TextAttribute.SIZE, fontSizePoints);
         // Bold / Plain

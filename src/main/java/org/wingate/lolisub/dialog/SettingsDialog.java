@@ -2,11 +2,13 @@ package org.wingate.lolisub.dialog;
 
 import org.wingate.lolisub.LoliSub;
 import org.wingate.lolisub.ass.AssStyle;
+import org.wingate.lolisub.ass.Encoding;
 import org.wingate.lolisub.controls.ColorViewer;
 import org.wingate.lolisub.controls.PlaceholderTextField;
 import org.wingate.lolisub.helper.DialogResult;
 import org.wingate.lolisub.helper.Ico;
 import org.wingate.lolisub.io.Settings;
+import org.wingate.lolisub.ui.FontRenderer;
 import org.wingate.lolisub.ui.preview.AssStylePreview;
 
 import javax.swing.*;
@@ -36,6 +38,9 @@ public class SettingsDialog extends JDialog {
     private final PlaceholderTextField tfProjectSeason;
     private final PlaceholderTextField tfProjectEpisode;
     private final JTextField tfProjectStylesCol;
+
+    // Style
+    private AssStyle assStyle = new AssStyle();
 
     public SettingsDialog(Frame owner) {
         super(owner, true);
@@ -136,6 +141,9 @@ public class SettingsDialog extends JDialog {
         AssStylePreview preview = new AssStylePreview();
         preview.setPreferredSize(new Dimension(preview.getWidth(), 60));
         JTextField tfSentence = new JTextField(preview.getSentenceSample());
+        tfSentence.addCaretListener((_)->{
+            preview.setSentenceSample(assStyle, tfSentence.getText());
+        });
         JPanel topStylesPanel = new JPanel(new BorderLayout());
         topStylesPanel.add(preview, BorderLayout.CENTER);
         topStylesPanel.add(tfSentence, BorderLayout.SOUTH);
@@ -150,9 +158,24 @@ public class SettingsDialog extends JDialog {
         JLabel lblStyleName = new JLabel(LoliSub.RSX.getString("settingsStyleName"));
         DefaultComboBoxModel<AssStyle> stylesComboBoxModel = new DefaultComboBoxModel<>();
         JComboBox<AssStyle> cbStyles = new JComboBox<>(stylesComboBoxModel);
+        cbStyles.addActionListener((_)->{
+            if(stylesComboBoxModel.getSize() > 0){
+                assStyle = cbStyles.getItemAt(cbStyles.getSelectedIndex());
+                preview.setSentenceSample(assStyle, tfSentence.getText());
+            }
+        });
         JLabel lblEncoding = new JLabel(LoliSub.RSX.getString("settingsStyleEncoding"));
-        DefaultComboBoxModel<String> comboModelEncoding = new DefaultComboBoxModel<>();
-        JComboBox<String> cbEncoding = new JComboBox<>(comboModelEncoding);
+        DefaultComboBoxModel<Encoding> comboModelEncoding = new DefaultComboBoxModel<>();
+        for(Encoding enc : Encoding.values()){
+            comboModelEncoding.addElement(enc);
+        }
+        comboModelEncoding.setSelectedItem(Encoding.Default);
+        JComboBox<Encoding> cbEncoding = new JComboBox<>(comboModelEncoding);
+        cbEncoding.addActionListener((_)->{
+            assert comboModelEncoding.getSelectedItem() != null;
+            assStyle.setEncoding(((Encoding)comboModelEncoding.getSelectedItem()).getCodepage());
+            preview.setSentenceSample(assStyle, tfSentence.getText());
+        });
         lblStyleName.setLocation(4,4);
         lblStyleName.setSize(130, 22);
         cbStyles.setLocation(138, 4);
@@ -167,11 +190,43 @@ public class SettingsDialog extends JDialog {
         firstStyleTab.add(cbEncoding);
 
         JLabel lblFontName = new JLabel(LoliSub.RSX.getString("settingsStyleFontName"));
-        DefaultComboBoxModel<String> comboModelFontName = new DefaultComboBoxModel<>();
-        JComboBox<String> cbFontName = new JComboBox<>(comboModelFontName);
+        DefaultComboBoxModel<Font> comboModelFontName = new DefaultComboBoxModel<>();
+        for(Font f : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()){
+            boolean add = true;
+            for(int i=0; i<comboModelFontName.getSize(); i++){
+                if(f.getFontName().equalsIgnoreCase(
+                        comboModelFontName.getElementAt(i).getFontName())){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                comboModelFontName.addElement(f);
+            }
+        }
+        JComboBox<Font> cbFontName = new JComboBox<>(comboModelFontName);
+        cbFontName.setRenderer(new FontRenderer());
+        cbFontName.addActionListener((_)->{
+            assert comboModelFontName.getSelectedItem() != null;
+            Font font = new Font(
+                    ((Font)comboModelFontName.getSelectedItem()).getFontName(),
+                    assStyle.getAssFont().getFont().getStyle(),
+                    assStyle.getAssFont().getFont().getSize()
+            );
+            assStyle.getAssFont().setFont(font.deriveFont(assStyle.getAssFont().getSize()));
+            preview.setSentenceSample(assStyle, tfSentence.getText());
+        });
         JLabel lblFontSize = new JLabel(LoliSub.RSX.getString("settingsStyleFontSize"));
         SpinnerNumberModel spinFontSizeModel = new SpinnerNumberModel(54, 4, 100_000, 1);
         JSpinner spinFontSize = new JSpinner(spinFontSizeModel);
+        spinFontSize.addChangeListener((_)->{
+            assStyle.getAssFont().setFont(
+                    assStyle.getAssFont().getFont().deriveFont(spinFontSizeModel
+                            .getNumber().floatValue()
+                    )
+            );
+            preview.setSentenceSample(assStyle, tfSentence.getText());
+        });
         JLabel lblFontStyle = new JLabel(LoliSub.RSX.getString("settingsStyleFontStyle"));
         JToggleButton tbBold = new JToggleButton(Ico.images("16 font style bold.png"));
         JToggleButton tbItalic = new JToggleButton(Ico.images("16 font style italic.png"));

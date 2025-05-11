@@ -12,7 +12,9 @@ public class Char extends AGraphicElement {
     private String character;
     private final List<Map<Tag, String>> tags;
     private Font font;
-    private double extraSpacing;
+    private double advance; // Advance
+    private double extraSpacing; // Spacing
+    private double height; // Height (ascent leading descent)
 
     public Char() {
         graphicType = GraphicType.Letter;
@@ -29,6 +31,7 @@ public class Char extends AGraphicElement {
         insertPoint = new Point2D.Double(x, y);
         relativeToInsertPoint = new Point2D.Double();
         shape = sh;
+        height = sh.getBounds2D().getHeight();
     }
 
     public void addTag(Map<Tag, String> tag){
@@ -55,11 +58,23 @@ public class Char extends AGraphicElement {
         this.font = font;
     }
 
+    public double getAdvance() {
+        return advance;
+    }
+
+    public void setAdvance(double advance) {
+        this.advance = advance;
+    }
+
     public double getExtraSpacing() {
         return extraSpacing;
     }
 
     public void setExtraSpacing(double extraSpacing) {
         this.extraSpacing = extraSpacing;
+    }
+
+    public double getHeight() {
+        return height;
     }
 }
