@@ -66,13 +66,37 @@ public class AssStylePreview extends JPanel {
         if(ass.getEvents().isEmpty()) return;
 
         // Foreground
-        Graphics2D g2d = (Graphics2D)g;
+        BufferedImage image = doImage(
+                ass.getInfos().getPlayResX(),
+                ass.getInfos().getPlayResY()
+        );
 
-        g2d.setRenderingHint(
+        g.drawImage(image, 0, 0, null);
+    }
+
+    public String getSentenceSample() {
+        return sentenceSample;
+    }
+
+    public void setSentenceSample(AssStyle style, String sentenceSample) {
+        this.sentenceSample = sentenceSample;
+        if(!sentenceSample.isEmpty() && style != null){
+            ass = assOf(style, sentenceSample);
+            repaint();
+        }
+    }
+
+    private BufferedImage doImage(int width, int height){
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+
+        g.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON
         );
 
-        Converter converter = Converter.creteShapes(ass.getEvents().getFirst(), ass);
+        AssEvent event = ass.getEvents().getFirst();
+
+        Converter converter = Converter.creteShapes(event, ass);
         // Calculation
         double sentenceWidth = 0d;
         double sentenceHeight = 0d;
@@ -87,34 +111,28 @@ public class AssStylePreview extends JPanel {
         // Position
         AffineTransform tr = new AffineTransform();
         tr.translate(
-                (getWidth() - sentenceWidth) / 2d,
-                ((getHeight() - sentenceHeight) / 2d) + getHeight()
+                (getWidth() - sentenceWidth) / 2d, // Center X
+                ((getHeight() - sentenceHeight) / 2d) + sentenceHeight // Center Y
         );
-        g2d.setTransform(tr);
+        g.setTransform(tr);
 
         // Draw
         for(AGraphicElement element : converter.getElements()){
             if(element instanceof Char c){
-                g.setColor(Color.blue);
-                c.draw(g2d);
-                g.setColor(Color.red);
-                c.fill(g2d);
+                // Shadow
+                // Outline
+                g.setColor(event.getStyle().getOutlineColor().getColor());
+                c.draw(g);
+                // Text
+                g.setColor(event.getStyle().getTextColor().getColor());
+                c.fill(g);
                 tr.translate(c.getAdvance() + c.getExtraSpacing(), 0d);
-                g2d.setTransform(tr);
+                g.setTransform(tr);
             }
         }
-    }
 
-    public String getSentenceSample() {
-        return sentenceSample;
-    }
-
-    public void setSentenceSample(AssStyle style, String sentenceSample) {
-        this.sentenceSample = sentenceSample;
-        if(!sentenceSample.isEmpty() && style != null){
-            ass = assOf(style, sentenceSample);
-            repaint();
-        }
+        g.dispose();
+        return image;
     }
 
     private static ASS assOf(AssStyle style, String sentence){
