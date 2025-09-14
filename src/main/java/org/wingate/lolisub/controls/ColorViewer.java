@@ -2,6 +2,8 @@ package org.wingate.lolisub.controls;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ColorViewer extends JPanel {
 
@@ -37,7 +39,6 @@ public class ColorViewer extends JPanel {
     }
 
     public String getBGR(Color c, boolean alpha){
-        StringBuilder sb = new StringBuilder();
         String a = Integer.toHexString(255 - c.getAlpha());
         if(a.length() < 2) a = "0" + a;
         String r = Integer.toHexString(c.getRed());
@@ -56,6 +57,15 @@ public class ColorViewer extends JPanel {
 
         public ColorPanel(Color color){
             this.color = color;
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+
+                    requireColorChanged_MouseClicked(e);
+                }
+            });
         }
 
         public ColorPanel(){
@@ -69,10 +79,25 @@ public class ColorViewer extends JPanel {
             g.setColor(Color.white);
             g.fillRect(0, 0, getWidth(), getHeight());
 
-            g.setColor(new Color(color.getRed(), color.getGreen(), color.getGreen()));
+            g.setColor(Color.lightGray);
+            boolean shift = false; int y = 0;
+            while(y < getHeight()){
+                for(int x=shift ? 5 : 0; x<getWidth(); x+=10){
+                    g.fillRect(x, y, 5, 5);
+                }
+                shift = !shift;
+                y += 5;
+            }
+
+            // RGB
+            Color rgb = new Color(color.getRed(), color.getGreen(), color.getBlue());
+            // RGBA
+            Color rgba = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+
+            g.setColor(rgb);
             g.fillRect(0,0,getWidth()/2, getHeight());
 
-            g.setColor(color);
+            g.setColor(rgba);
             g.fillRect(getWidth()/2, 0, getWidth()/2, getHeight());
         }
 
@@ -82,6 +107,20 @@ public class ColorViewer extends JPanel {
 
         public void setColor(Color color) {
             this.color = color;
+        }
+
+        public void requireColorChanged_MouseClicked(MouseEvent event){
+            if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1){
+                Color newColor = JColorChooser.showDialog(
+                        new JFrame(),
+                        "Change color",
+                        color,
+                        true
+                );
+                if(newColor != null){
+
+                }
+            }
         }
     }
 
@@ -94,6 +133,7 @@ public class ColorViewer extends JPanel {
         tfColor.setText(getBGR(color, true));
         panColor.setColor(color);
         panColor.repaint();
+        slideAlpha.setValue(color.getAlpha());
     }
 
     public JLabel getLblText() {
