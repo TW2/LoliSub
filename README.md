@@ -6,7 +6,7 @@ Just looking for lolis when fansubbing or just pick up waifu.
 -
 /!\ Help wanted to implement libass /!\
 
-This project runs on Java 24 or above, you can use OpenJDK 24, Temurin 24 or Oracle JDK 24 (and maybe buy it if you are a society).<br>
+This project runs on Java 25 or above, you can use OpenJDK 25, Temurin 25 or Oracle JDK 25.<br>
 LoliSub is available for free and opensource, that lets you modify it under the same licensing which is GNU/GPLv3. You must install at least Java to run to after compilation. If you want to compile the code yourself you have to get git, maven and the clone of this project in the normal way.
 
 Just do the following command to work with LoliSub :<br>
