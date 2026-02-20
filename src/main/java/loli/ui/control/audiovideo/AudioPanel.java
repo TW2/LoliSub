@@ -2,14 +2,12 @@ package loli.ui.control.audiovideo;
 
 import loli.helper.OnError;
 import loli.helper.OnLoad;
-import loli.ui.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AudioPanel extends JPanel {
 
-    private final MainFrame mainFrame;
     private final AudioTimeBar audioTimeBar;
     private final VideoPlayer videoPlayer;
 
@@ -19,11 +17,8 @@ public class AudioPanel extends JPanel {
     private long microsStart;
     private long microsEnd;
 
-    public AudioPanel(MainFrame mainFrame, VideoPlayer videoPlayer){
-        this.mainFrame = mainFrame;
+    public AudioPanel(WaveFormPanel waveFormPanel, VideoPlayer videoPlayer){
         this.videoPlayer = videoPlayer;
-
-        WaveFormPanel waveFormPanel = mainFrame.getWaveFormPanel();
 
         scrollH = new JScrollBar(JScrollBar.HORIZONTAL, 0, 0, 0, 1_000_000);
 
@@ -106,10 +101,6 @@ public class AudioPanel extends JPanel {
         videoPlayer.setStartTime(s);
         videoPlayer.setEndTime(e);
         videoPlayer.play();
-    }
-
-    public MainFrame getMainFrame() {
-        return mainFrame;
     }
 
     public VideoPlayer getVideoPlayer() {

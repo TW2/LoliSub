@@ -65,7 +65,6 @@ public class VersionsDialog extends JDialog {
         for(ISO_3166 x : ISO_3166.values()){
             if(x == ISO_3166.Unknown || x == null) continue;
             try{
-                OnLoad.locations(x.getAlpha2() + ".gif");
                 cbModelIso.addElement(x);
             }catch(Exception _){ }
         }
@@ -183,7 +182,7 @@ public class VersionsDialog extends JDialog {
                 lblText.setForeground(UIManager.getColor("List.foreground"));
             }
 
-            lblFlag.setIcon(OnLoad.locations(value.getAlpha2() + ".gif"));
+            lblFlag.setIcon(OnLoad.locations(value));
             lblText.setText(value.getCountry());
 
             return this;

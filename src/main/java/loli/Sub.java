@@ -1,7 +1,7 @@
 package loli;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import loli.ui.MainFrame;
+import loli.ui.SubFrame;
 
 import java.awt.*;
 import java.util.ResourceBundle;
@@ -26,7 +26,7 @@ public class Sub {
             System.out.printf("Discord :\n%s\n", DISCORD);
 
             FlatLightLaf.setup();
-            MainFrame mf = new MainFrame();
+            SubFrame mf = new SubFrame();
             mf.setTitle(String.format("%s (%s)", NAME, SOURCE));
             mf.setLocationRelativeTo(null);
             mf.setVisible(true);

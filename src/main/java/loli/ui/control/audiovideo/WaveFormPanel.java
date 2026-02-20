@@ -1,9 +1,9 @@
 package loli.ui.control.audiovideo;
 
+import loli.Exchange;
 import loli.Sub;
 import loli.enumeration.DrawColor;
 import loli.helper.AssTime;
-import loli.ui.MainFrame;
 
 import loli.ui.dialog.ProgressFrame;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -20,7 +20,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.nio.file.Path;
@@ -37,9 +36,9 @@ import java.util.concurrent.Executors;
  */
 public class WaveFormPanel extends JPanel {
 
-    private final Path dbPath;
+    private final Exchange exchange;
 
-    private final MainFrame mainFrame;
+    private final Path dbPath;
 
     private long offsetMicros;
     private long periodMicros;
@@ -62,9 +61,9 @@ public class WaveFormPanel extends JPanel {
     private Point mouseStartPoint;
     private Point mouseEndPoint;
 
-    public WaveFormPanel(MainFrame mainFrame) {
+    public WaveFormPanel(Exchange exchange) {
+        this.exchange = exchange;
         setDoubleBuffered(true);
-        this.mainFrame = mainFrame;
 
         dbPath = Path.of(Path.of("").toAbsolutePath() + "\\conf\\audio.db");
 
@@ -110,17 +109,13 @@ public class WaveFormPanel extends JPanel {
                 if(e.getButton() == MouseEvent.BUTTON1){
                     // Left button
                     mouseStartPoint = new Point(e.getX() + (int)ox, e.getY()); // OK
-                    mainFrame.getTablePanel().getEditor().setToLockStart(t); // OK
-                    mainFrame.getAudioPanel().setMicrosStart((long) t.getMsTime() * 1_000L); // OK
-                    mainFrame.getVideoPanel().setMicrosStart((long) t.getMsTime() * 1_000L); // OK
+                    exchange.defineStart(t);
                 }
 
                 if(e.getButton() == MouseEvent.BUTTON3){
                     // Right button
                     mouseEndPoint = new Point(e.getX() + (int)ox, e.getY()); // OK
-                    mainFrame.getTablePanel().getEditor().setToLockEnd(t); // OK
-                    mainFrame.getAudioPanel().setMicrosEnd((long) t.getMsTime() * 1_000L); // OK
-                    mainFrame.getVideoPanel().setMicrosEnd((long) t.getMsTime() * 1_000L); // OK
+                    exchange.defineEnd(t);
                 }
 
                 repaint();
@@ -450,10 +445,6 @@ public class WaveFormPanel extends JPanel {
 
         g.dispose();
         repaint();
-    }
-
-    public MainFrame getMainFrame() {
-        return mainFrame;
     }
 
     public long getDurationMicros() {

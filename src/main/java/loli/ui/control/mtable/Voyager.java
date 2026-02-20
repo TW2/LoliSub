@@ -1,13 +1,14 @@
 package loli.ui.control.mtable;
 
-import loli.enumeration.ISO_639;
+import loli.enumeration.ISO_3166;
 import loli.subtitle.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Voyager {
-    private ISO_639 language;
+    private ISO_3166 language;
     private final List<Voyager> voyagers;
     private final List<Bookmark> bookmarks;
 
@@ -18,7 +19,7 @@ public class Voyager {
     private String note;
     private Event event;
 
-    public Voyager(ISO_639 language, boolean visible, Event event) {
+    public Voyager(ISO_3166 language, boolean visible, Event event) {
         voyagers = new ArrayList<>();
         bookmarks = new ArrayList<>();
         this.language = language;
@@ -31,14 +32,14 @@ public class Voyager {
     }
 
     public Voyager() {
-        this(ISO_639.English, false, null);
+        this(ISO_3166.getISO_3166(Locale.getDefault().getISO3Country()), false, null);
     }
 
     public List<Voyager> getVoyagers() {
         return voyagers;
     }
 
-    public ISO_639 getLanguage() {
+    public ISO_3166 getLanguage() {
         return language;
     }
 
@@ -46,7 +47,7 @@ public class Voyager {
         return bookmarks;
     }
 
-    public void setLanguage(ISO_639 language) {
+    public void setLanguage(ISO_3166 language) {
         this.language = language;
     }
 

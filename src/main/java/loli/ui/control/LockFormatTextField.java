@@ -55,7 +55,7 @@ public class LockFormatTextField extends JPanel {
 
         btnFormat.setSize(3, 20);
         btnLock.setSize(10, 20);
-        placeholderTextField1.setPreferredSize(new java.awt.Dimension(74, 20));
+        placeholderTextField1.setPreferredSize(new java.awt.Dimension(85, 20));
 
         btnFormat.addActionListener((e)->{
             changeFormat();

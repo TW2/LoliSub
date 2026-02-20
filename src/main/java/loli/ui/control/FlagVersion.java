@@ -138,9 +138,7 @@ public class FlagVersion extends JPanel {
         private final JLabel lblFlag;
 
         public ComboBoxVersionRenderer(){
-            lblFlag = new JLabel(OnLoad.locations(ISO_3166.getISO_3166(Locale.getDefault().getISO3Country()).getAlpha2().toLowerCase() + ".gif"));
-
-
+            lblFlag = new JLabel();
             setLayout(new BorderLayout());
             add(lblFlag, BorderLayout.CENTER);
         }
@@ -162,7 +160,7 @@ public class FlagVersion extends JPanel {
                     UIManager.getColor("List.background"));
 
             try{
-                lblFlag.setIcon(OnLoad.locations(value.getAlpha2().toLowerCase() + ".gif"));
+                lblFlag.setIcon(OnLoad.locations(value));
             }catch(Exception _){
 
             }
@@ -177,5 +175,13 @@ public class FlagVersion extends JPanel {
 
     public int getCbDisplay2Value() {
         return cbDisplay2.getSelectedIndex();
+    }
+
+    public ISO_3166 getFlag1(){
+        return display1Model.getElementAt(cbDisplay1.getSelectedIndex());
+    }
+
+    public ISO_3166 getFlag2(){
+        return display2Model.getElementAt(cbDisplay2.getSelectedIndex());
     }
 }

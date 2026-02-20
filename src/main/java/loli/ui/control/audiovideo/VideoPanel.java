@@ -1,14 +1,14 @@
 package loli.ui.control.audiovideo;
 
+import loli.Exchange;
 import loli.helper.OnLoad;
-import loli.ui.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class VideoPanel extends JPanel {
 
-    private final MainFrame mainFrame;
+    private final Exchange exchange;
     private final VideoPlayer player;
     private final VideoTimeBar timeBar;
     private AudioTimeBar audioTimeBar;
@@ -17,8 +17,8 @@ public class VideoPanel extends JPanel {
     private long microsStart;
     private long microsEnd;
 
-    public VideoPanel (MainFrame mainFrame, VideoPlayer videoPlayer){
-        this.mainFrame = mainFrame;
+    public VideoPanel (Exchange exchange, VideoPlayer videoPlayer){
+        this.exchange = exchange;
         player = videoPlayer;
         timeBar = new VideoTimeBar(true, player);
 
@@ -91,10 +91,6 @@ public class VideoPanel extends JPanel {
         player.setStartTime(s);
         player.setEndTime(e);
         player.play();
-    }
-
-    public MainFrame getMainFrame() {
-        return mainFrame;
     }
 
     public VideoPlayer getPlayer() {

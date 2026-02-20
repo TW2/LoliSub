@@ -301,9 +301,9 @@ public enum ISO_3166 {
     Zaire("ZR", "ZAR", "Zaire"),
     Unknown("XX", "XXX", "Unknown");
 
-    String alpha_2;
-    String alpha_3;
-    String name;
+    final String alpha_2;
+    final String alpha_3;
+    final String name;
 
     private ISO_3166(String alpha_2, String alpha_3, String name){
         this.alpha_2 = alpha_2;

@@ -1,5 +1,6 @@
 package loli.ui.control.editor;
 
+import loli.Exchange;
 import loli.Sub;
 import loli.enumeration.AssEventType;
 import loli.enumeration.DialogResult;
@@ -7,10 +8,10 @@ import loli.enumeration.ISO_3166;
 import loli.helper.*;
 import loli.io.Settings;
 import loli.subtitle.Event;
-import loli.ui.MainFrame;
 import loli.ui.control.ElementsComboBox;
 import loli.ui.control.FlagVersion;
 import loli.ui.control.LockFormatTextField;
+import loli.ui.control.mtable.Voyager;
 import loli.ui.dialog.SettingsDialog;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ import java.util.Locale;
 
 public class EditorPanel extends JPanel {
 
-    private final MainFrame mainFrame;
+    private final Exchange exchange;
 
     private final JTextPane paneOrigin = new JTextPane();
     private final JTextPane paneTranslation = new JTextPane();
@@ -46,8 +47,8 @@ public class EditorPanel extends JPanel {
     private FlagVersion flagVersion;
 
     // TODO: ISO-3166 and translations tasks with and without flagVersion
-    public EditorPanel(MainFrame mainFrame){
-        this.mainFrame = mainFrame;
+    public EditorPanel(Exchange exchange) {
+        this.exchange = exchange;
 
         setLayout(new BorderLayout());
 
@@ -116,7 +117,7 @@ public class EditorPanel extends JPanel {
 
         ecbEditStyles.getButton().addActionListener((_)->{
             Path conf = Path.of(Path.of("").toAbsolutePath() + "\\conf\\conf.txt");
-            SettingsDialog set = new SettingsDialog(mainFrame);
+            SettingsDialog set = new SettingsDialog(new Frame());
             set.getTabbedPane().setSelectedIndex(1);
             set.getStyleTabbedPane().setSelectedIndex(0);
             set.showDialog(Settings.read(conf.toString()));
@@ -128,7 +129,7 @@ public class EditorPanel extends JPanel {
 
         ecbEditActors.getButton().addActionListener((_)->{
             Path conf = Path.of(Path.of("").toAbsolutePath() + "\\conf\\conf.txt");
-            SettingsDialog set = new SettingsDialog(mainFrame);
+            SettingsDialog set = new SettingsDialog(new Frame());
             set.getTabbedPane().setSelectedIndex(2);
             set.showDialog(Settings.read(conf.toString()));
 
@@ -139,7 +140,7 @@ public class EditorPanel extends JPanel {
 
         ecbEditEffects.getButton().addActionListener((_)->{
             Path conf = Path.of(Path.of("").toAbsolutePath() + "\\conf\\conf.txt");
-            SettingsDialog set = new SettingsDialog(mainFrame);
+            SettingsDialog set = new SettingsDialog(new Frame());
             set.getTabbedPane().setSelectedIndex(3);
             set.showDialog(Settings.read(conf.toString()));
 
@@ -151,11 +152,7 @@ public class EditorPanel extends JPanel {
         btnAddEventQueue.addActionListener(e -> {
             try{
                 String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
-                mainFrame.getTablePanel().getTable().getAssTableModel().addValue(
-                        createTextPaneEvent(text)
-                );
-                mainFrame.getTablePanel().getTable().getAssTable().updateUI();
-                mainFrame.getTablePanel().getLeft().repaint();
+                exchange.addEvent(createTextPaneEvent(text), flagVersion.getFlag1(), flagVersion.getFlag2());
             }catch(Exception ex){
                 OnError.dialogErr(ex.getLocalizedMessage());
             }
@@ -163,15 +160,8 @@ public class EditorPanel extends JPanel {
 
         btnReplaceSelEvent.addActionListener(e -> {
             try{
-                if(mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow() != -1){
-                    String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
-                    mainFrame.getTablePanel().getTable().getAssTableModel().replaceValueAt(
-                            createTextPaneEvent(text),
-                            mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow()
-                    );
-                    mainFrame.getTablePanel().getTable().getAssTable().updateUI();
-                    mainFrame.getTablePanel().getLeft().repaint();
-                }
+                String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
+                exchange.replaceEvent(createTextPaneEvent(text), flagVersion.getFlag1(), flagVersion.getFlag2());
             }catch(Exception ex){
                 OnError.dialogErr(ex.getLocalizedMessage());
             }
@@ -179,15 +169,8 @@ public class EditorPanel extends JPanel {
 
         btnAddEventBefore.addActionListener(e -> {
             try{
-                if(mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow() != -1){
-                    String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
-                    mainFrame.getTablePanel().getTable().getAssTableModel().insertValueAt(
-                            createTextPaneEvent(text),
-                            mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow()
-                    );
-                    mainFrame.getTablePanel().getTable().getAssTable().updateUI();
-                    mainFrame.getTablePanel().getLeft().repaint();
-                }
+                String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
+                exchange.beforeEvent(createTextPaneEvent(text), flagVersion.getFlag1(), flagVersion.getFlag2());
             }catch(Exception ex){
                 OnError.dialogErr(ex.getLocalizedMessage());
             }
@@ -195,21 +178,8 @@ public class EditorPanel extends JPanel {
 
         btnAddEventAfter.addActionListener(e -> {
             try{
-                if(mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow() != -1){
-                    String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
-                    if(mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow() == mainFrame.getTablePanel().getTable().getAssTable().getRowCount() - 1){
-                        mainFrame.getTablePanel().getTable().getAssTableModel().addValue(
-                                createTextPaneEvent(text)
-                        );
-                    }else{
-                        mainFrame.getTablePanel().getTable().getAssTableModel().insertValueAt(
-                                createTextPaneEvent(text),
-                                mainFrame.getTablePanel().getTable().getAssTable().getSelectedRow() + 1
-                        );
-                    }
-                    mainFrame.getTablePanel().getTable().getAssTable().updateUI();
-                    mainFrame.getTablePanel().getLeft().repaint();
-                }
+                String text = paneTranslation.getText().isEmpty() ? paneOrigin.getText() : paneTranslation.getText();
+                exchange.afterEvent(createTextPaneEvent(text), flagVersion.getFlag1(), flagVersion.getFlag2());
             }catch(Exception ex){
                 OnError.dialogErr(ex.getLocalizedMessage());
             }
@@ -234,10 +204,6 @@ public class EditorPanel extends JPanel {
         return event;
     }
 
-    public MainFrame getMainFrame() {
-        return mainFrame;
-    }
-
     public void setToLockStart(AssTime t){
         if(lockStart.isLock()) return;
         lockStart.setAssTime(t);
@@ -251,5 +217,9 @@ public class EditorPanel extends JPanel {
     public void setToLockDuration(AssTime t){
         if(lockDuration.isLock()) return;
         lockDuration.setAssTime(t);
+    }
+
+    public void addToPanel(Voyager voyager){
+
     }
 }

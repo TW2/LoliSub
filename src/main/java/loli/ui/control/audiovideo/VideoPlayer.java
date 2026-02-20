@@ -1,6 +1,6 @@
 package loli.ui.control.audiovideo;
 
-import loli.ui.MainFrame;
+import loli.Exchange;
 import loli.ui.control.FFMpeg;
 
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 public class VideoPlayer extends javax.swing.JPanel {
 
-    private final MainFrame mainFrame;
+    private final Exchange exchange;
 
     private VideoTimeBar videoTimeBar;
     private AudioTimeBar audioTimeBar;
@@ -19,9 +19,9 @@ public class VideoPlayer extends javax.swing.JPanel {
     private double fps;
     private int frame;
 
-    public VideoPlayer(MainFrame mainFrame) {
+    public VideoPlayer(Exchange exchange) {
         super(true);
-        this.mainFrame = mainFrame;
+        this.exchange = exchange;
 
         videoTimeBar = null;
         audioTimeBar = null;
@@ -144,7 +144,4 @@ public class VideoPlayer extends javax.swing.JPanel {
         this.audioTimeBar = audioTimeBar;
     }
 
-    public MainFrame getMainFrame() {
-        return mainFrame;
-    }
 }
