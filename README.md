@@ -4,22 +4,31 @@ LoliSub
 -
 Just looking for lolis when fansubbing or just pick up waifu.
 
-This project runs on Java 25 or above, you can use OpenJDK 25, Temurin 25 or Oracle JDK 25.<br>
-LoliSub is available for free and opensource, that lets you modify it under the same licensing which is GNU/GPLv3. You must install at least Java to run to after compilation. If you want to compile the code yourself you have to get git, maven and the clone of this project in the normal way.
+- **Developed with OpenJDK 25** (compatibility with Temurin 25/Oracle JDK 25/Graal VM 25).
+- Free and opensource, just follow the rules of GNU/GPLv3.
 
-Just do the following command to work with LoliSub :<br>
-1/ ```git clone https://github.com/TW2/LoliSub.git``` in your Terminal (Windows : CMD or Terminal or Powershell)<br>
-2/ In the folder created by the command ```git clone```, type ```mvn verify``` in your Terminal.<br>
-3/ Enter target subfolder and type ```java -jar``` a space and the shaded version of lolisub following by ```.jar```.
+Compilation
+-
+You may use maven and git and java (and correct paths setting in your os).
+<br>Follow these steps in a Terminal :
 
-It is recommanded to launch the software by a Terminal. The reason is that you can read the errors while the shortcut way just crash with nothing to tell you why it does it.
+- ```git clone https://github.com/TW2/LoliSub.git```
+- Enter the ```LoliSub``` subfolder and type ```mvn compile``` and ```mvn verify``` or just ```mvn verify```.
+- Enter the ```target``` subfolder and type ```java -jar``` a space and the shaded version of lolisub following by ```.jar```.
 
-LoliSub actual features :<br>
+It is recommanded to launch the software by a Terminal to see errors, just make a sh script in Linux/MacOS systems, and batch on Windows 10/11. If you have the latest version of Windows, all batch scripts are blocked by security manager so make a Powershell script.
+
+Features
+-
+
 - Available in English and French (auto)
 - Not automatical but functional light/dark mode
 - Open and save ASS files in a table
 - Open and play video (video component and waveform, but don't play on waveform)
 - Open audio (waveform, but don't play on waveform)
+
+Discord
+-
 
 You can join me on Discord to speak or idle, in English or French (cause I'm a half white black Frenchy).
 
