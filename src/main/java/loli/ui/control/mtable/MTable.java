@@ -164,7 +164,7 @@ public class MTable extends JPanel {
                     g2d.setColor(
                             voyager.isVisible() ?
                                     voyager.isSelected() ?
-                                            DrawColor.blue.getColor(.2f) : Color.white
+                                            DrawColor.blue.getColor(.2f) : getBackground()
                                     : DrawColor.light_gray.getColor(.2f)
                     );
                     g2d.fillRect(0, y, getWidth(), h);
@@ -195,7 +195,7 @@ public class MTable extends JPanel {
                 counter++;
                 int h = voyager.isCollapsed() ? 20 : 40 + voyager.getVoyagers().size() * 20;
                 if(h >= vBarOffset && vBarOffset < h + getHeight()) {
-                    g2d.setColor(Color.black);
+                    g2d.setColor(getForeground());
                     // +/-
                     Ellipse2D plusMinus = new Ellipse2D.Double(2, y + 2, 16, 16);
                     if(voyager.isCollapsed()) {
