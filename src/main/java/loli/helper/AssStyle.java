@@ -102,7 +102,7 @@ public class AssStyle {
     }
 
     public String toRawLine() throws HColorException {
-        return String.format("Style: %s,%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%f,%f,%f,%f,%d,%f,%f,%d,%d,%d,%d,%d",
+        return String.format("Style: %s,%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%s,%d,%d,%d,%d,%d",
                 getName(), // Style name
                 getAssFont().getName(), // Font name
                 Math.round(getAssFont().getSize()), // Font size
@@ -114,13 +114,13 @@ public class AssStyle {
                 getAssFont().isItalic() ? "-1" : "0",
                 getAssFont().isUnderline() ? "-1" : "0",
                 getAssFont().isStrikeout() ? "-1" : "0",
-                getScaleX(),
-                getScaleY(),
-                getSpacing(),
-                getAngleZ(),
+                Float.toString(getScaleX()).replace(",", "."),
+                Float.toString(getScaleY()).replace(",", "."),
+                Float.toString(getSpacing()).replace(",", "."),
+                Float.toString(getAngleZ()).replace(",", "."),
                 getBorderStyle(),
-                getOutline(),
-                getShadow(),
+                Float.toString(getOutline()).replace(",", "."),
+                Float.toString(getShadow()).replace(",", "."),
                 getAlignment().getNumber(),
                 getMarginL(),
                 getMarginR(),

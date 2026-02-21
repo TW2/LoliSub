@@ -184,4 +184,8 @@ public class FlagVersion extends JPanel {
     public ISO_3166 getFlag2(){
         return display2Model.getElementAt(cbDisplay2.getSelectedIndex());
     }
+
+    public boolean flag2HasMany(){
+        return display2Model.getSize() > 0;
+    }
 }

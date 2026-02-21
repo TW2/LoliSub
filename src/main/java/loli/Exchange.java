@@ -31,6 +31,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class Exchange {
     /*
@@ -331,6 +334,40 @@ public class Exchange {
                 int z = fcFile.showOpenDialog(this);
                 if(z == JFileChooser.APPROVE_OPTION){
                     ASS ass = ASS.read(fcFile.getSelectedFile().getPath());
+                    List<Voyager> list = new ArrayList<>();
+                    Voyager lastVoyager = null;
+                    int counter = 0;
+                    for(Event event : ass.getEvents()) {
+                        ISO_3166 iso = event.getText().startsWith("{ISO-3166=") ?
+                                ISO_3166.getISO_3166(event.getText().substring("{ISO-3166=".length(), event.getText().indexOf("}")))
+                                : ISO_3166.getISO_3166(Locale.getDefault().getISO3Country());
+                        boolean visible = event.getType() != AssEventType.Comment;
+                        if(event.getText().startsWith("{ISO-3166=")){
+                            event.setText(event.getText().substring("{ISO-3166=".length() + 4));
+                        }
+                        Voyager v = new Voyager(iso, visible, event);
+
+                        counter++;
+
+                        if(lastVoyager == null) {
+                            lastVoyager = v;
+                            System.out.println(1);
+                        }else if(v.getEvent().getStart().toAss().equals(lastVoyager.getEvent().getStart().toAss())
+                                && v.getEvent().getEnd().toAss().equals(lastVoyager.getEvent().getEnd().toAss())
+                                && !v.getLanguage().getAlpha3().equals(lastVoyager.getLanguage().getAlpha3())){
+                            lastVoyager.getVoyagers().add(v);
+                            System.out.println(2);
+                        }else{
+                            list.add(lastVoyager);
+                            list.add(v);
+                            lastVoyager = null;
+                            System.out.println(3);
+                        }
+                    }
+                    list.add(lastVoyager);
+                    voyagersTable.getVoyagers().clear();
+                    voyagersTable.getVoyagers().addAll(list);
+                    voyagersTable.repaint();
                     //tablePanel.getTable().loadASS(ass);
                 }
             });
@@ -354,8 +391,27 @@ public class Exchange {
                 });
                 int z = fcFile.showSaveDialog(this);
                 if(z == JFileChooser.APPROVE_OPTION){
+                    ASS ass = new ASS();
+                    if(editorPanel.getFlag1().equals(editorPanel.getFlag2()) && !editorPanel.flag2HasMany()){
+                        for(Voyager voyager : voyagersTable.getVoyagers()){
+                            if (voyager == null) continue;
+                            ass.getEvents().add(voyager.getEvent());
+                        }
+                    }else{
+                        for(Voyager voyager : voyagersTable.getVoyagers()){
+                            if (voyager == null) continue;
+                            Event e1 = voyager.getEvent();
+                            e1.setText("{ISO-3166=" + voyager.getLanguage().getAlpha3() + "}" + voyager.getEvent().getText());
+                            ass.getEvents().add(e1);
+                            for(Voyager v : voyager.getVoyagers()){
+                                Event e2 = v.getEvent();
+                                e2.setText("{ISO-3166=" + v.getLanguage().getAlpha3() + "}" + v.getEvent().getText());
+                                ass.getEvents().add(e2);
+                            }
+                        }
+                    }
                     //ASS ass = tablePanel.getTable().saveASS();
-                    //ASS.write(ass, fcFile.getSelectedFile().getPath());
+                    ASS.write(ass, fcFile.getSelectedFile().getPath());
                 }
             });
 

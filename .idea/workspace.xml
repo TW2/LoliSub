@@ -4,40 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Check pass">
-      <change afterPath="$PROJECT_DIR$/src/main/java/loli/Exchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/loli/filefilter/AudioFileFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/loli/filefilter/MediaFileFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/loli/ui/SubFrame.java" afterDir="false" />
+    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Integration of table as voyagers' object.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/Sub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/Sub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/enumeration/ISO_3166.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/enumeration/ISO_3166.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/helper/OnLoad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/helper/OnLoad.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/MainFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/loli/Exchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/Exchange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/loli/helper/AssStyle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/helper/AssStyle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/FlagVersion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/FlagVersion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/LockFormatTextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/LockFormatTextField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/AudioPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/AudioPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/VideoPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/VideoPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/VideoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/VideoPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/WaveFormPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/audiovideo/WaveFormPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/editor/EditorPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/editor/EditorPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/MTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/MTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/Voyager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/Voyager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/AssTableModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/Bookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/ChatPanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/CheckBookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/CollapseGroup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/CommentBookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/LeftComponent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/MainRenderer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/MainView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/OtherBookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/SynchroBookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/TablePanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/table/TransBookmark.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/dialog/VersionsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/dialog/VersionsDialog.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,20 +38,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Application.loli.Sub.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/yves/IdeaProjects/FeuilleProjects/LoliSub",
-    "settings.editor.selected.configurable": "proofread"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.loli.Sub.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/yves/IdeaProjects/FeuilleProjects/LoliSub&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;proofread&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -143,14 +115,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771270860760</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Integration of table as voyagers' object.">
+      <option name="closed" value="true" />
+      <created>1771572777885</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1771572777885</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Project" />
     <MESSAGE value="Update" />
     <MESSAGE value="Check pass" />
-    <option name="LAST_COMMIT_MESSAGE" value="Check pass" />
+    <MESSAGE value="Integration of table as voyagers' object." />
+    <option name="LAST_COMMIT_MESSAGE" value="Integration of table as voyagers' object." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

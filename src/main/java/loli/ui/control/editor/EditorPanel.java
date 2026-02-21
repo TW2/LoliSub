@@ -222,4 +222,16 @@ public class EditorPanel extends JPanel {
     public void addToPanel(Voyager voyager){
 
     }
+
+    public ISO_3166 getFlag1(){
+        return flagVersion.getFlag1();
+    }
+
+    public ISO_3166 getFlag2(){
+        return flagVersion.getFlag2();
+    }
+
+    public boolean flag2HasMany(){
+        return flagVersion.flag2HasMany();
+    }
 }
