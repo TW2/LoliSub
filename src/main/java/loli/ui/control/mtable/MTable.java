@@ -160,7 +160,7 @@ public class MTable extends JPanel {
                     g2d.setColor(
                             voyager.isVisible() ?
                                     voyager.isSelected() ?
-                                            DrawColor.blue.getColor(.2f) : getBackground()
+                                            DrawColor.blue.getColor(.2f) : UIManager.getColor("TextPane.background")
                                     : DrawColor.light_gray.getColor(.2f)
                     );
                     g2d.fillRect(0, y, getWidth(), h);
