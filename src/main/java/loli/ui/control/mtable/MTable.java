@@ -5,16 +5,18 @@ import loli.enumeration.AssEventType;
 import loli.enumeration.DrawColor;
 import loli.enumeration.ISO_3166;
 import loli.helper.AssTime;
+import loli.helper.Clipboard;
+import loli.helper.OnError;
 import loli.helper.OnLoad;
 import loli.subtitle.Event;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class MTable extends JPanel {
     private final List<Voyager> voyagers;
     private final JScrollBar scrollBar;
     private int vBarOffset;
+    private int pressedAt = -1;
+    private int releasedAt = -1;
 
     public MTable(Exchange exchange) {
         this.exchange = exchange;
@@ -51,6 +55,8 @@ public class MTable extends JPanel {
                 super.mouseClicked(e);
 
                 if(e.getButton() == MouseEvent.BUTTON1) {
+                    pressedAt = -1;
+                    releasedAt = -1;
                     int row = getRowAt(e.getY());
                     if(e.getY() > 20 && row < voyagers.size()) {
                         switch(e.getClickCount()){
@@ -74,6 +80,20 @@ public class MTable extends JPanel {
                     }
                 }
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+
+                pressedAt = getRowAt(e.getY());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                releasedAt = getRowAt(e.getY());
+            }
         });
 
         addMouseWheelListener(new MouseWheelListener() {
@@ -89,6 +109,22 @@ public class MTable extends JPanel {
                     scrollBar.setValue(-(vBarOffset / thickness));
                 }
                 repaint();
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+
+                try{
+                    if(pressedAt != -1){
+                        voyagers.get(getRowAt(e.getY())).setSelected(true);
+                        repaint();
+                    }
+                }catch(Exception _){
+
+                }
             }
         });
 
@@ -340,6 +376,51 @@ public class MTable extends JPanel {
         JMenuItem mDelete = new JMenuItem("Delete");
         JMenuItem mDuplicate = new JMenuItem("Duplicate");
 
+        mCut.setIcon(OnLoad.images("20px-Crystal_Clear_action_editcut.png"));
+        mCopy.setIcon(OnLoad.images("20px-Crystal_Clear_action_editcopy.png"));
+        mPaste.setIcon(OnLoad.images("20px-Crystal_Clear_action_editpaste.png"));
+        mDelete.setIcon(OnLoad.images("16KO.png"));
+        mDuplicate.setIcon(OnLoad.images("funsub-dupliquer.png"));
+
+        mCut.addActionListener((e) -> {
+            List<Integer> indices = getSelectedVoyagers();
+            indices.sort(Integer::compareTo);
+            if(indices.isEmpty()) return;
+            // Copy
+            copyVoyagers(indices, exchange.getFlag1(), exchange.getFlag2());
+            // Delete
+            deleteEvent(exchange.getFlag1(), exchange.getFlag2());
+        });
+        mCopy.addActionListener((e) -> {
+            List<Integer> indices = getSelectedVoyagers();
+            indices.sort(Integer::compareTo);
+            if(indices.isEmpty()) return;
+            // Copy
+            copyVoyagers(indices, exchange.getFlag1(), exchange.getFlag2());
+        });
+        mPaste.addActionListener((e) -> {
+            List<Integer> indices = getSelectedVoyagers();
+            indices.sort(Integer::compareTo);
+            if(indices.isEmpty()) return;
+            // Paste (Delete and Paste)
+            pasteVoyagers(indices.getFirst(), exchange.getFlag1(), exchange.getFlag2());
+        });
+        mDelete.addActionListener((e) -> {
+            // Delete
+            deleteEvent(exchange.getFlag1(), exchange.getFlag2());
+        });
+        mDuplicate.addActionListener((e) -> {
+            List<Integer> indices = getSelectedVoyagers();
+            indices.sort(Integer::compareTo);
+            if(indices.isEmpty()) return;
+            for(int i=indices.size()-1;i>=0;i--){
+                beforeEvent(voyagers.get(indices.get(i)).getEvent(),
+                        exchange.getFlag1(), exchange.getFlag2());
+            }
+            updateVerticalScrollBar();
+            repaint();
+        });
+
         popupMenu.add(mCut);
         popupMenu.add(mCopy);
         popupMenu.add(mPaste);
@@ -348,6 +429,16 @@ public class MTable extends JPanel {
 
 
         return popupMenu;
+    }
+
+    private List<Integer> getSelectedVoyagers(){
+        List<Integer> list = new ArrayList<>();
+        for(int i=0;i<voyagers.size();i++) {
+            if(voyagers.get(i).isSelected()) {
+                list.add(i);
+            }
+        }
+        return list;
     }
 
     private String applyStrip(String s){
@@ -527,5 +618,53 @@ public class MTable extends JPanel {
         }
         updateVerticalScrollBar();
         repaint();
+    }
+
+    public void copyVoyagers(List<Integer> selected, ISO_3166 f1, ISO_3166 f2) {
+        StringBuilder sb = new StringBuilder();
+        if(f1.getAlpha3().equals(f2.getAlpha3())){
+            for(Voyager voyager : voyagers){
+                if(voyager.getLanguage().getAlpha3().equals(f1.getAlpha3())){
+                    if(voyager.isSelected()){
+                        sb.append(voyager.getEvent().toRawLine());
+                        sb.append("\n");
+                    }
+                }
+            }
+        }else{
+            for(Voyager voyager : voyagers){
+                if(voyager.isSelected()){
+                    for(Voyager v : voyager.getVoyagers()){
+                        if(v.getLanguage().getAlpha3().equals(f2.getAlpha3())){
+                            sb.append(v.getEvent().toRawLine());
+                            sb.append("\n");
+                        }
+                    }
+                }
+            }
+        }
+        if(!sb.isEmpty()){
+            Clipboard.copyString(sb.toString());
+        }
+    }
+
+    public void pasteVoyagers(int row, ISO_3166 f1, ISO_3166 f2) {
+        try(StringReader sr = new StringReader(Clipboard.pasteString());
+            BufferedReader br = new BufferedReader(sr)
+        ){
+            deleteEvent(f1, f2);
+            voyagers.get(Math.min(voyagers.size()-1, row)).setSelected(true);
+            String line;
+            while((line = br.readLine()) != null){
+                Event event = Event.createFromRawLine(line, exchange.getAss());
+                if(f1.getAlpha3().equals(f2.getAlpha3())){
+                    beforeEvent(event, f1, f2);
+                }else{
+                    addEvent(event, f1, f2);
+                }
+            }
+        }catch(Exception ex){
+            OnError.dialogErr(ex.getLocalizedMessage());
+        }
     }
 }

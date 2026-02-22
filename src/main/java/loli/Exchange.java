@@ -54,6 +54,7 @@ public class Exchange {
      */
 
     private static SubFrame subFrame;
+    private static ASS ass;
 
     private static WaveFormPanel waveFormPanel;
     private static AudioPanel audioPanel;
@@ -66,6 +67,7 @@ public class Exchange {
 
     public Exchange(SubFrame subFrame){
         Exchange.subFrame = subFrame;
+        ass = new ASS();
         VideoPlayer videoPlayer = new VideoPlayer(this);
         videoPanel = new VideoPanel(this, videoPlayer);
         waveFormPanel = new WaveFormPanel(this);
@@ -537,6 +539,14 @@ public class Exchange {
         videoPanel.setMicrosEnd((long) t.getMsTime() * 1_000L); // OK
     }
 
+    public ASS getAss(){
+        return ass;
+    }
+
+    public void setAss(ASS ass){
+        Exchange.ass = ass;
+    }
+
     public void addEvent(loli.subtitle.Event event, ISO_3166 f1, ISO_3166 f2){
         voyagersTable.addEvent(event, f1, f2);
     }
@@ -559,5 +569,17 @@ public class Exchange {
 
     public void deleteEvent(ISO_3166 f1, ISO_3166 f2){
         voyagersTable.deleteEvent(f1, f2);
+    }
+
+    public ISO_3166 getFlag1(){
+        return editorPanel.getFlag1();
+    }
+
+    public ISO_3166 getFlag2(){
+        return editorPanel.getFlag2();
+    }
+
+    public boolean flag2HasMany(){
+        return editorPanel.flag2HasMany();
     }
 }
