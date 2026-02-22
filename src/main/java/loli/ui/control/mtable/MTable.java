@@ -1,6 +1,7 @@
 package loli.ui.control.mtable;
 
 import loli.Exchange;
+import loli.Sub;
 import loli.enumeration.AssEventType;
 import loli.enumeration.DrawColor;
 import loli.enumeration.ISO_3166;
@@ -370,11 +371,11 @@ public class MTable extends JPanel {
         JPopupMenu popupMenu = new JPopupMenu();
 
         // Cut, Copy, Paste, Delete, Duplicate
-        JMenuItem mCut = new JMenuItem("Cut");
-        JMenuItem mCopy = new JMenuItem("Copy");
-        JMenuItem mPaste = new JMenuItem("Paste");
-        JMenuItem mDelete = new JMenuItem("Delete");
-        JMenuItem mDuplicate = new JMenuItem("Duplicate");
+        JMenuItem mCut = new JMenuItem(Sub.L.getString("control.cut"));
+        JMenuItem mCopy = new JMenuItem(Sub.L.getString("control.copy"));
+        JMenuItem mPaste = new JMenuItem(Sub.L.getString("control.paste"));
+        JMenuItem mDelete = new JMenuItem(Sub.L.getString("control.delete"));
+        JMenuItem mDuplicate = new JMenuItem(Sub.L.getString("control.duplicate"));
 
         mCut.setIcon(OnLoad.images("20px-Crystal_Clear_action_editcut.png"));
         mCopy.setIcon(OnLoad.images("20px-Crystal_Clear_action_editcopy.png"));

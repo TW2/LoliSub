@@ -62,6 +62,9 @@ public class EditorPanel extends JPanel {
                 paneTranslation
         );
 
+        paneOrigin.setComponentPopupMenu(createOriginPopupMenu());
+        paneTranslation.setComponentPopupMenu(createTranslationPopupMenu());
+
         add(panCommandsOne, BorderLayout.NORTH);
         add(splitTextPanes, BorderLayout.CENTER);
         add(panCommandsTwo, BorderLayout.SOUTH);
@@ -256,6 +259,158 @@ public class EditorPanel extends JPanel {
             }
             paneTranslation.setText(add.getEvent().getText());
         }
+    }
+
+    private JPopupMenu createOriginPopupMenu(){
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem mCut = new JMenuItem(
+                Sub.L.getString("control.cut"),
+                OnLoad.images("20px-Crystal_Clear_action_editcut.png"));
+
+        JMenuItem mCopy = new JMenuItem(
+                Sub.L.getString("control.copy"),
+                OnLoad.images("20px-Crystal_Clear_action_editcopy.png"));
+
+        JMenuItem mPaste = new JMenuItem(
+                Sub.L.getString("control.paste"),
+                OnLoad.images("20px-Crystal_Clear_action_editpaste.png"));
+
+        JMenuItem mDelete = new JMenuItem(
+                Sub.L.getString("control.delete"),
+                OnLoad.images("16KO.png"));
+
+        mCut.addActionListener((e)->{
+            try{
+                int start = paneOrigin.getSelectionStart();
+                int end = paneOrigin.getSelectionEnd();
+                String text = paneOrigin.getText();
+                Clipboard.copyString(paneOrigin.getSelectedText());
+                paneOrigin.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mCopy.addActionListener((e)->{
+            try{
+                Clipboard.copyString(paneOrigin.getSelectedText());
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mPaste.addActionListener((e)->{
+            try{
+                int start = paneOrigin.getSelectionStart();
+                int end = paneOrigin.getSelectionEnd();
+                String text = paneOrigin.getText();
+                paneOrigin.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        Clipboard.pasteString() +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mDelete.addActionListener((e)->{
+            try{
+                int start = paneOrigin.getSelectionStart();
+                int end = paneOrigin.getSelectionEnd();
+                String text = paneOrigin.getText();
+                paneOrigin.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        popupMenu.add(mCut);
+        popupMenu.add(mCopy);
+        popupMenu.add(mPaste);
+        popupMenu.add(mDelete);
+
+        return  popupMenu;
+    }
+
+    private JPopupMenu createTranslationPopupMenu(){
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem mCut = new JMenuItem(
+                Sub.L.getString("control.cut"),
+                OnLoad.images("20px-Crystal_Clear_action_editcut.png"));
+
+        JMenuItem mCopy = new JMenuItem(
+                Sub.L.getString("control.copy"),
+                OnLoad.images("20px-Crystal_Clear_action_editcopy.png"));
+
+        JMenuItem mPaste = new JMenuItem(
+                Sub.L.getString("control.paste"),
+                OnLoad.images("20px-Crystal_Clear_action_editpaste.png"));
+
+        JMenuItem mDelete = new JMenuItem(
+                Sub.L.getString("control.delete"),
+                OnLoad.images("16KO.png"));
+
+        mCut.addActionListener((e)->{
+            try{
+                int start = paneTranslation.getSelectionStart();
+                int end = paneTranslation.getSelectionEnd();
+                String text = paneTranslation.getText();
+                Clipboard.copyString(paneTranslation.getSelectedText());
+                paneTranslation.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mCopy.addActionListener((e)->{
+            try{
+                Clipboard.copyString(paneTranslation.getSelectedText());
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mPaste.addActionListener((e)->{
+            try{
+                int start = paneTranslation.getSelectionStart();
+                int end = paneTranslation.getSelectionEnd();
+                String text = paneTranslation.getText();
+                paneTranslation.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        Clipboard.pasteString() +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        mDelete.addActionListener((e)->{
+            try{
+                int start = paneTranslation.getSelectionStart();
+                int end = paneTranslation.getSelectionEnd();
+                String text = paneTranslation.getText();
+                paneTranslation.setText(
+                        (start > 0 ? text.substring(0, start) : "") +
+                        (end < text.length() ? text.substring(end) : ""));
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
+
+        popupMenu.add(mCut);
+        popupMenu.add(mCopy);
+        popupMenu.add(mPaste);
+        popupMenu.add(mDelete);
+
+        return  popupMenu;
     }
 
     public ISO_3166 getFlag1(){
