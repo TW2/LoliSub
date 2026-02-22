@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Open/Save ASS (events have been updated to support the voyagers table)">
+    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Fix color of the voyagers' table for the dark mode.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/loli/Exchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/Exchange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/editor/EditorPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/editor/EditorPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/MTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/ui/control/mtable/MTable.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -128,7 +130,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771675730461</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix color of the voyagers' table for the dark mode.">
+      <option name="closed" value="true" />
+      <created>1771679981719</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1771679981719</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -137,7 +147,8 @@
     <MESSAGE value="Check pass" />
     <MESSAGE value="Integration of table as voyagers' object." />
     <MESSAGE value="Open/Save ASS (events have been updated to support the voyagers table)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Open/Save ASS (events have been updated to support the voyagers table)" />
+    <MESSAGE value="Fix color of the voyagers' table for the dark mode." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix color of the voyagers' table for the dark mode." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

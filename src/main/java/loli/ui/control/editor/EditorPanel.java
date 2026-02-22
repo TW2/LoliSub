@@ -44,6 +44,7 @@ public class EditorPanel extends JPanel {
     private final JButton btnReplaceSelEvent = new JButton();
     private final JButton btnAddEventBefore = new JButton();
     private final JButton btnAddEventAfter = new JButton();
+    private final JButton btnDeleteEvent =  new JButton();
     private FlagVersion flagVersion;
 
     // TODO: ISO-3166 and translations tasks with and without flagVersion
@@ -103,16 +104,19 @@ public class EditorPanel extends JPanel {
         btnReplaceSelEvent.setIcon(OnLoad.images("16OK-custom-orange.png"));
         btnAddEventBefore.setIcon(OnLoad.images("16OK-custom-blue.png"));
         btnAddEventAfter.setIcon(OnLoad.images("16OK-custom-violet.png"));
+        btnDeleteEvent.setIcon(OnLoad.images("16KO.png"));
 
         btnAddEventQueue.setToolTipText(Sub.L.getString("btnAddEventQueue"));
         btnReplaceSelEvent.setToolTipText(Sub.L.getString("btnReplaceEvent"));
         btnAddEventBefore.setToolTipText(Sub.L.getString("btnAddEventBefore"));
         btnAddEventAfter.setToolTipText(Sub.L.getString("btnAddEventAfter"));
+        // TODO - Add tooltip for btnDeleteEvent
 
         panCommandsTwo.add(btnAddEventQueue);
         panCommandsTwo.add(btnReplaceSelEvent);
         panCommandsTwo.add(btnAddEventBefore);
         panCommandsTwo.add(btnAddEventAfter);
+        panCommandsTwo.add(btnDeleteEvent);
         panCommandsTwo.add(flagVersion);
 
         ecbEditStyles.getButton().addActionListener((_)->{
@@ -184,6 +188,14 @@ public class EditorPanel extends JPanel {
                 OnError.dialogErr(ex.getLocalizedMessage());
             }
         });
+
+        btnDeleteEvent.addActionListener(e -> {
+            try{
+                exchange.deleteEvent(getFlag1(), getFlag2());
+            }catch(Exception ex){
+                OnError.dialogErr(ex.getLocalizedMessage());
+            }
+        });
     }
 
     private Event createTextPaneEvent(String text){
@@ -220,7 +232,30 @@ public class EditorPanel extends JPanel {
     }
 
     public void addToPanel(Voyager voyager){
-
+        cbEditComment.setSelected(voyager.getEvent().getType() == AssEventType.Comment);
+        spinEditModelLayer.setValue(voyager.getEvent().getLayer());
+        lockStart.setAssTime(voyager.getEvent().getStart());
+        lockEnd.setAssTime(voyager.getEvent().getEnd());
+        lockDuration.setAssTime(AssTime.getMsDuration(voyager.getEvent().getStart(), voyager.getEvent().getEnd()));
+        ecbEditStyles.setSelected(voyager.getEvent().getStyle());
+        ecbEditActors.setSelected(voyager.getEvent().getName());
+        spinEditModelML.setValue(voyager.getEvent().getMarginL());
+        spinEditModelMR.setValue(voyager.getEvent().getMarginR());
+        spinEditModelMV.setValue(voyager.getEvent().getMarginV());
+        ecbEditEffects.setSelected(voyager.getEvent().getEffect());
+        paneOrigin.setText(voyager.getEvent().getText());
+        if(getFlag1().getAlpha3().equals(getFlag2().getAlpha3())){
+            paneTranslation.setText(voyager.getEvent().getText());
+        }else{
+            Voyager add = voyager;
+            for(Voyager v : voyager.getVoyagers()){
+                if(v.getLanguage().getAlpha3().equals(getFlag2().getAlpha3())){
+                    add = v;
+                    break;
+                }
+            }
+            paneTranslation.setText(add.getEvent().getText());
+        }
     }
 
     public ISO_3166 getFlag1(){

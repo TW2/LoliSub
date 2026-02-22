@@ -51,15 +51,7 @@ public class MTable extends JPanel {
                 super.mouseClicked(e);
 
                 if(e.getButton() == MouseEvent.BUTTON1) {
-                    int row = 0, y = vBarOffset + 20;
-                    for(Voyager v : voyagers) {
-                        y += v.isCollapsed() ? 20 : 40 + v.getVoyagers().size() * 20;
-                        if(y < e.getY()) {
-                            row += 1;
-                        }else{
-                            break;
-                        }
-                    }
+                    int row = getRowAt(e.getY());
                     if(e.getY() > 20 && row < voyagers.size()) {
                         switch(e.getClickCount()){
                             case 1 -> {
@@ -71,6 +63,7 @@ public class MTable extends JPanel {
                                         v.setSelected(false);
                                     }
                                     voyagers.get(row).setSelected(true);
+                                    exchange.setEditorEvent(voyagers.get(row));
                                 }
                                 repaint();
                             }
@@ -113,14 +106,17 @@ public class MTable extends JPanel {
         return voyagers;
     }
 
-    public void addLine(Voyager voyager){
-        voyagers.add(voyager);
-        updateVerticalScrollBar();
-        repaint();
-    }
-
-    public void addLine(ISO_3166 language, boolean visible, Event event){
-        addLine(new Voyager(language, visible, event));
+    private int getRowAt(int yCursor){
+        int row = 0, y = vBarOffset + 20;
+        for(Voyager v : voyagers) {
+            y += v.isCollapsed() ? 20 : 40 + v.getVoyagers().size() * 20;
+            if(y < yCursor) {
+                row += 1;
+            }else{
+                break;
+            }
+        }
+        return row;
     }
 
     private int getVoyagerTotalHeight(){
@@ -395,8 +391,17 @@ public class MTable extends JPanel {
             for(int i=0;i<voyagers.size();i++){
                 Voyager voyager = voyagers.get(i);
                 if(voyager.isSelected()){
-                    index = i;
-                    break;
+                    boolean exists = false;
+                    for(Voyager v : voyager.getVoyagers()){
+                        if(v.getLanguage().getAlpha3().equals(f2.getAlpha3())){
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if(!exists){
+                        index = i;
+                        break;
+                    }
                 }
             }
             if(index != -1 && !voyagers.isEmpty()){
@@ -432,7 +437,7 @@ public class MTable extends JPanel {
                 for (Voyager v : voyagers) {
                     for (int j = 0; j < v.getVoyagers().size(); j++) {
                         ISO_3166 iso = v.getVoyagers().get(j).getLanguage();
-                        if (iso.equals(f2)) {
+                        if (iso.equals(f2) && v.isSelected()) {
                             index2 = j;
                             break;
                         }
@@ -491,6 +496,36 @@ public class MTable extends JPanel {
 
     public void setStripped(Stripped stripped) {
         this.stripped = stripped;
+        repaint();
+    }
+
+    public void deleteEvent(ISO_3166 f1, ISO_3166 f2) {
+        List<Integer> indices = new ArrayList<>();
+        for(int i=0;i<voyagers.size();i++){
+            Voyager voyager = voyagers.get(i);
+            if(voyager.isSelected()){
+                if(f1.getAlpha3().equals(f2.getAlpha3())) {
+                    indices.add(i);
+                }else{
+                    int index = -1;
+                    for(int j=0;j<voyager.getVoyagers().size();j++){
+                        if(voyager.getVoyagers().get(j).getLanguage().getAlpha3().equals(f2.getAlpha3())){
+                            index = j;
+                            break;
+                        }
+                    }
+                    if(index != -1){
+                        voyager.getVoyagers().remove(index);
+                    }
+                }
+            }
+        }
+        if(!indices.isEmpty()){
+            for(int i=indices.size()-1;i>=0;i--){
+                voyagers.remove(indices.get(i).intValue());
+            }
+        }
+        updateVerticalScrollBar();
         repaint();
     }
 }

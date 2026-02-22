@@ -552,4 +552,12 @@ public class Exchange {
     public void afterEvent(Event event, ISO_3166 f1, ISO_3166 f2){
         voyagersTable.afterEvent(event, f1, f2);
     }
+
+    public void setEditorEvent(Voyager voyager){
+        editorPanel.addToPanel(voyager);
+    }
+
+    public void deleteEvent(ISO_3166 f1, ISO_3166 f2){
+        voyagersTable.deleteEvent(f1, f2);
+    }
 }
