@@ -27,6 +27,8 @@ Features
 - Open and play video (video component and waveform, but don't play on waveform)
 - Open audio (waveform, but don't play on waveform)
 
+[Screenshots can be found here.](https://github.com/TW2/LoliSub/tree/master/src/main/resources/screens)
+
 Discord
 -
 
