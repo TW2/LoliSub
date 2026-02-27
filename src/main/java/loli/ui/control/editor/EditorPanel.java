@@ -5,6 +5,7 @@ import loli.Sub;
 import loli.enumeration.AssEventType;
 import loli.enumeration.DialogResult;
 import loli.enumeration.ISO_3166;
+import loli.exception.HColorException;
 import loli.helper.*;
 import loli.io.Settings;
 import loli.subtitle.Event;
@@ -13,6 +14,7 @@ import loli.ui.control.FlagVersion;
 import loli.ui.control.LockFormatTextField;
 import loli.ui.control.mtable.Voyager;
 import loli.ui.dialog.SettingsDialog;
+import loli.ui.dialog.StylesDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,14 +125,23 @@ public class EditorPanel extends JPanel {
         panCommandsTwo.add(flagVersion);
 
         ecbEditStyles.getButton().addActionListener((_)->{
-            Path conf = Path.of(Path.of("").toAbsolutePath() + "\\conf\\conf.txt");
-            SettingsDialog set = new SettingsDialog(new Frame());
-            set.getTabbedPane().setSelectedIndex(1);
-            set.getStyleTabbedPane().setSelectedIndex(0);
-            set.showDialog(Settings.read(conf.toString()));
-
-            if(set.getDialogResult() == DialogResult.OK){
-                Settings.write(conf.toString(), set.getSettings());
+            try{
+                Path conf = Path.of(Path.of("").toAbsolutePath() + "\\conf\\conf.txt");
+//            SettingsDialog set = new SettingsDialog(new Frame());
+//            set.getTabbedPane().setSelectedIndex(1);
+//            set.getStyleTabbedPane().setSelectedIndex(0);
+//            set.showDialog(Settings.read(conf.toString()));
+//
+//            if(set.getDialogResult() == DialogResult.OK){
+//                Settings.write(conf.toString(), set.getSettings());
+//            }
+                StylesDialog dialog = new StylesDialog(new Frame());
+                dialog.showDialog(exchange.getAss().getStyles());
+                if(dialog.getDialogResult() == DialogResult.OK){
+                    exchange.getAss().setStyles(dialog.getStyles());
+                }
+            } catch (HColorException e) {
+                OnError.dialogErr(e.getLocalizedMessage());
             }
         });
 

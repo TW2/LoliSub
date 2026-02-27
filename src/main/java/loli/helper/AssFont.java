@@ -32,11 +32,11 @@ public class AssFont {
     }
 
     public AssFont(String name) {
-        this(name, 12f);
+        this(name, 52f);
     }
 
     public AssFont() {
-        this("Serif", 12f);
+        this("Serif", 52f);
     }
 
     public String getName() {

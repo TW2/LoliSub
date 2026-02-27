@@ -121,16 +121,16 @@ public class HColor {
 
         switch (scheme) {
             case ABGR -> {
-                s = "&H" + a + b + g + r; // Used in style
+                s = ("&H" + a + b + g + r).toUpperCase(); // Used in style
             }
             case BGR -> {
-                s = "&H" + b + g + r + "&"; // Used in event for colors
+                s = ("&H" + b + g + r + "&").toUpperCase(); // Used in event for colors
             }
             case HTML -> {
-                s = "#" + b + g + r; // Not used
+                s = ("#" + r + g + b).toUpperCase(); // Not used
             }
             case ALPHA -> {
-                s = "&H" + a + "&"; // Used in event for alphas
+                s = ("&H" + a + "&").toUpperCase(); // Used in event for alphas
             }
             default -> {
                 throw new HColorException("Unexpected error!");

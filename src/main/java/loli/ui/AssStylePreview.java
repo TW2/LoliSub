@@ -1,6 +1,7 @@
 package loli.ui;
 
 import loli.enumeration.AssEventType;
+import loli.enumeration.DrawColor;
 import loli.helper.AssStyle;
 import loli.helper.AssTime;
 import loli.io.ASS;
@@ -52,10 +53,10 @@ public class AssStylePreview extends JPanel {
         super.paintComponent(g);
 
         // Background
-        g.setColor(Color.white);
+        g.setColor(DrawColor.dark_green.getColor());
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        g.setColor(Color.lightGray);
+        g.setColor(DrawColor.lime.getColor());
         boolean shift = true;
         for(int y=0; y<getHeight(); y+=UNIT){
             for(int x=0; x<getWidth(); x+=UNIT*2){
