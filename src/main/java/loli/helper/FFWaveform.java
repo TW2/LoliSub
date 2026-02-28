@@ -22,10 +22,9 @@ public class FFWaveform {
     }
 
     // Extract by 10 seconds and put in database with 'name' database
-    public void extract(String media, AssTime start, AssTime end, int width, int height) {
-        boolean error = false;
+    public void extract(String media, AssTime start, AssTime end, int width, int height) throws InterruptedException, IOException {
         AssTime current = start;
-        while(!error) {
+        while(end.getMsTime() < current.getMsTime()) {
             ProcessBuilder pb = new ProcessBuilder(
                     cmd,
                     "-ss", String.format("%dms", (long)current.getMsTime()),
@@ -35,18 +34,13 @@ public class FFWaveform {
                     "-frames:v", "1",
                     "output.png"
             );
-            try(Process p = pb.redirectErrorStream(true).start()){
-                p.waitFor();
-                BufferedImage img = ImageIO.read(new File("output.png"));
-                audioDB.add(new AudioImage(img, current));
-            } catch (IOException | InterruptedException e) {
-                OnError.dialogErr(e.getLocalizedMessage());
-                error = true;
-            }
+            Process p = pb.redirectErrorStream(true).start();
+            p.waitFor();
+            BufferedImage img = ImageIO.read(new File("output.png"));
+            audioDB.add(new AudioImage(img, current));
+
             current = new AssTime(current.getMsTime() + 10_000d); // +10 seconds
-            if(end.getMsTime() < current.getMsTime()) {
-                break;
-            }
+            p.close();
         }
     }
 
