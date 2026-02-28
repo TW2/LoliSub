@@ -1,7 +1,8 @@
-package loli.io;
+package loli.io.db;
 
 import loli.exception.HColorException;
 import loli.helper.AssStyle;
+import loli.io.Settings;
 
 import java.nio.file.Path;
 import java.sql.*;
@@ -192,5 +193,9 @@ public class Database {
 
     //-------------------------------------------------------------------
 
-
+    public static Statement connect(Path dbPath) throws SQLException {
+        // create a database connection
+        Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath.toAbsolutePath());
+        return connection.createStatement();
+    }
 }
