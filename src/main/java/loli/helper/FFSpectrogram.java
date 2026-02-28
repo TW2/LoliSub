@@ -38,7 +38,6 @@ public class FFSpectrogram {
             audioDB.add(new AudioImage(img, current));
 
             current = new AssTime(current.getMsTime() + 10_000d); // +10 seconds
-            p.close();
         }
     }
 
