@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Audio wave and spectrum db.">
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/helper/FFSpectrogram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/helper/FFSpectrogram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loli/helper/FFWaveform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/helper/FFWaveform.java" afterDir="false" />
+    <list default="true" id="e2390fec-8c97-4eea-be29-4c6098e7269d" name="Changes" comment="Fix maven error that cannot process the autoclosing Process method, while Java is okay for that.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/loli/helper/StylesCollection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/loli/io/db/StylesDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/loli/io/db/AudioDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loli/io/db/AudioDB.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +186,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772257592630</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fix maven error java.lang.Process cannot be converted to java.lang.AutoCloseable.">
+      <option name="closed" value="true" />
+      <created>1772258116725</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1772258116725</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Fix maven error that cannot process the autoclosing Process method, while Java is okay for that.">
+      <option name="closed" value="true" />
+      <created>1772258397293</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1772258397293</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -200,7 +218,9 @@
     <MESSAGE value="Popupmenus and translations." />
     <MESSAGE value="New dialog." />
     <MESSAGE value="Audio wave and spectrum db." />
-    <option name="LAST_COMMIT_MESSAGE" value="Audio wave and spectrum db." />
+    <MESSAGE value="Fix maven error java.lang.Process cannot be converted to java.lang.AutoCloseable." />
+    <MESSAGE value="Fix maven error that cannot process the autoclosing Process method, while Java is okay for that." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix maven error that cannot process the autoclosing Process method, while Java is okay for that." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

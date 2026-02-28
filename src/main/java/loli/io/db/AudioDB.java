@@ -59,7 +59,7 @@ public class AudioDB {
             }
             if(!base64.isEmpty()){
                 statement.executeUpdate(String.format(
-                        "insert into %s values (%d, '%s')",
+                        "insert into %s values (%d, %s)",
                         tableName, micros, base64));
             }
         } catch (SQLException | IOException e) {
